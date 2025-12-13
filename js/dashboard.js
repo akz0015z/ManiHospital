@@ -1,15 +1,19 @@
-console.log("📡 DASHBOARD.JS CONNECTED — Using Rails API");
+console.log(" DASHBOARD.JS CONNECTED — Using Rails API");
 
 // Backend URL
 const API_URL = "http://localhost:4000/patients";
 
 document.addEventListener("DOMContentLoaded", () => {
 
+ 
+  // FORM + UI ELEMENTS
+ 
+
   const patientForm = document.getElementById("patientForm");
   const patientTableBody = document.getElementById("patientTableBody");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // Add form fields FIXED
+  // Add form
   const patientName = document.getElementById("patientName");
   const patientAge = document.getElementById("patientAge");
   const patientCondition = document.getElementById("patientCondition");
@@ -17,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const roomNumber = document.getElementById("roomNumber");
   const patientStatus = document.getElementById("patientStatus");
 
-  // Edit modal FIXED
+  // Edit modal
   const editForm = document.getElementById("editPatientForm");
   const editModal = new bootstrap.Modal(document.getElementById("editPatientModal"));
 
@@ -29,27 +33,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const editPatientRoom = document.getElementById("editPatientRoom");
   const editPatientStatus = document.getElementById("editPatientStatus");
 
-  // Load data
+  // Load initial data
   loadPatients();
 
-  // ---------------------------
-  // GET ALL PATIENTS
-  // ---------------------------
+ 
+  // FETCH ALL PATIENTS
+
+
   async function loadPatients() {
     try {
       const response = await fetch(API_URL);
       const patients = await response.json();
+
       renderPatients(patients);
-      updateCharts(patients);  
+      updateCharts(patients);
+
     } catch (err) {
       console.error("❌ Failed to fetch patients:", err);
       alert("Cannot connect to server.");
     }
   }
 
-  // ---------------------------
+
   // ADD PATIENT
-  // ---------------------------
+ 
+
   patientForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -82,9 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---------------------------
-  // RENDER PATIENT TABLE
-  // ---------------------------
+
+  // RENDER TABLE
+  
+
   function renderPatients(patients) {
     patientTableBody.innerHTML = "";
 
@@ -118,9 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ---------------------------
-  // EDIT BUTTON -> OPEN MODAL
-  // ---------------------------
+
+  // EDIT/LOAD INTO MODAL
+
+
   patientTableBody.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("edit-btn")) return;
 
@@ -144,9 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---------------------------
-  // SAVE EDIT (PUT)
-  // ---------------------------
+
+  // SAVE CHANGES 
+
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -181,9 +191,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---------------------------
+ 
   // DELETE PATIENT
-  // ---------------------------
+
   patientTableBody.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("delete-btn")) return;
 
@@ -204,31 +214,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---------------------------
   // LOGOUT
-  // ---------------------------
+ 
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("loggedInUser");
     window.location.href = "login.html";
   });
 });
 
-// ============================
-// CHART VARIABLES
-// ============================
+
+// CHART HANDLING
+
 let statusChart = null;
 let doctorChart = null;
 
-// ============================
-// UPDATE CHARTS WHEN DATA LOADED
-// ============================
 function updateCharts(patients) {
-  
-  // Count statuses
+
+  //  COUNT STATUSES 
   const admitted = patients.filter(p => p.status === "Admitted").length;
   const discharged = patients.filter(p => p.status === "Discharged").length;
 
-  // Group by doctor
+  //  COUNT DOCTOR LOAD 
   const doctorCounts = {};
   patients.forEach(p => {
     doctorCounts[p.doctor] = (doctorCounts[p.doctor] || 0) + 1;
@@ -237,13 +243,11 @@ function updateCharts(patients) {
   const doctorLabels = Object.keys(doctorCounts);
   const doctorValues = Object.values(doctorCounts);
 
-  // Destroy old charts to avoid duplicates
+  // Destroy existing charts (prevents duplicates)
   if (statusChart) statusChart.destroy();
   if (doctorChart) doctorChart.destroy();
 
-  // ============================
-  // PIE CHART — STATUS
-  // ============================
+  //  PIE CHART 
   const ctx1 = document.getElementById("statusChart").getContext("2d");
   statusChart = new Chart(ctx1, {
     type: "pie",
@@ -256,9 +260,7 @@ function updateCharts(patients) {
     }
   });
 
-  // ============================
-  // BAR CHART — DOCTOR COUNT
-  // ============================
+  // BAR CHART 
   const ctx2 = document.getElementById("doctorChart").getContext("2d");
   doctorChart = new Chart(ctx2, {
     type: "bar",
@@ -271,5 +273,4 @@ function updateCharts(patients) {
       }]
     }
   });
-
 }
