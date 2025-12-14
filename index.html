@@ -116,30 +116,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-  async function checkBackend() {
-    const banner = document.createElement("div");
-    banner.classList.add("banner");
-    document.body.prepend(banner);
-
-    try {
-      // Check real backend endpoint
-      const response = await fetch("http://127.0.0.1:4000/patients", {
-        headers: { "Cache-Control": "no-cache" }
-      });
-
-      if (!response.ok) throw new Error("Backend unreachable");
-
-      banner.classList.add("success");
-      banner.textContent = `✅ Backend connected at ${new Date().toLocaleTimeString()}`;
-    } catch (error) {
-      banner.classList.add("error");
-      banner.textContent = "❌ Cannot connect to backend (Rails may not be running)";
-    }
-  }
-
-  window.addEventListener("load", checkBackend);
-</script>
-
 </body>
 </html>

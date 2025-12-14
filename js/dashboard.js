@@ -1,7 +1,7 @@
 console.log(" DASHBOARD.JS CONNECTED — Using Rails API");
 
 // Backend URL
-const API_URL = "http://localhost:4000/patients";
+const API_URL = "https://manihospital-api.onrender.com/patients";
 
 document.addEventListener("DOMContentLoaded", () => {
 

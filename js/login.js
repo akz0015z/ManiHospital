@@ -14,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   try {
     console.log("📡 Sending login request...");
 
-    const response = await fetch("http://localhost:4000/login", {
+    const response = await fetch("https://manihospital-api.onrender.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -29,10 +29,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     if (response.ok) {
       alert("✅ Login successful!");
 
-      // store logged-in user info
       localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-
-      // redirect to dashboard
       window.location.href = "dashboard.html";
     } else {
       alert("❌ Login failed: " + (data.error || "Invalid email or password"));
@@ -40,6 +37,6 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   } catch (error) {
     console.error("Login error:", error);
-    alert("⚠️ Server connection failed. Make sure Rails is running.");
+    alert("⚠️ Server connection failed.");
   }
 });
