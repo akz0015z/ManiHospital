@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const patientForm = document.getElementById("patientForm");
   const patientTableBody = document.getElementById("patientTableBody");
   const logoutBtn = document.getElementById("logoutBtn");
+  const adminBtn = document.getElementById("adminBtn");
 
   // Add form
   const patientName = document.getElementById("patientName");
@@ -220,6 +221,17 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("loggedInUser");
     window.location.href = "login.html";
   });
+
+  // ADMIN ACCESS
+
+  adminBtn.addEventListener("click", () => {
+    const pass = prompt("Enter admin password:");
+    if (pass === "akinbioduN") {
+      window.location.href = "admin.html";
+    } else {
+      alert("Access denied");
+    }
+  });
 });
 
 
@@ -243,11 +255,9 @@ function updateCharts(patients) {
   const doctorLabels = Object.keys(doctorCounts);
   const doctorValues = Object.values(doctorCounts);
 
-  // Destroy existing charts (prevents duplicates)
   if (statusChart) statusChart.destroy();
   if (doctorChart) doctorChart.destroy();
 
-  //  PIE CHART 
   const ctx1 = document.getElementById("statusChart").getContext("2d");
   statusChart = new Chart(ctx1, {
     type: "pie",
@@ -260,7 +270,6 @@ function updateCharts(patients) {
     }
   });
 
-  // BAR CHART 
   const ctx2 = document.getElementById("doctorChart").getContext("2d");
   doctorChart = new Chart(ctx2, {
     type: "bar",
